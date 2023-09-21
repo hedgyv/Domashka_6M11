@@ -31,11 +31,20 @@ class AddressBook(UserDict):
         print(self.current_value)
         # print(len(self.data))
         
-    def __next__(self):
-        if len(self.data) > 1:   
-            self.current_value += 1        
-            return self.current_value
-        raise StopIteration 
+    # def __next__(self):
+    #     if len(self.data) > 1:   
+    #         self.current_value += 1        
+    #         return self.current_value
+    #     raise StopIteration 
+
+    def iterator(self, counts):
+        count = 0
+        result = ""
+        for name in self.data:
+            if count < int(counts):
+                count += 1
+                result += str(self.data[name]) + "\n"
+        return result
     
     def find(self, record, name):
         #print(len(self.data))
@@ -247,9 +256,13 @@ def days_left(adr_book, name):
     return existing_record.days_to_birthday(the_birthday)
 
 @input_error
-def l_iterator(c: CustomIterator):
-    for i in c:
-        print(i)
+def l_iterator(adr_book, counts):
+    if len(adr_book) < int(counts):
+        raise ValueError
+    print("Contacts:")
+    return adr_book.iterator(counts)
+
+
 
 
     
@@ -268,7 +281,7 @@ def split_req(req):
 
 def main():
     adr_book = AddressBook()
-    c = CustomIterator()
+    #c = CustomIterator()
     
     
 
@@ -309,7 +322,7 @@ def main():
         print(days_left(adr_book, do_requirement_parts[1]))
 
     def iterator_func():
-        print(l_iterator(c))
+        print(l_iterator(adr_book, do_requirement_parts[1]))
 
 
     while True:
